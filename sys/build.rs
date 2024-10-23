@@ -4,12 +4,13 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
+    let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();
     if env::var("CARGO_FEATURE_NATIVE").is_ok() {
         // Tell cargo to tell rustc to link the system openpnp-capture shared
         // library and its dependencies
         println!("cargo:rustc-link-lib=openpnp-capture");
 
-        if env::consts::OS == "linux" {
+        if target_os == "linux" {
             println!("cargo:rustc-link-lib=turbojpeg");
         }
     } else if env::var("CARGO_FEATURE_VENDOR").is_ok() {
@@ -27,14 +28,14 @@ fn main() {
         );
         println!("cargo:rustc-link-lib=static=openpnp-capture");
 
-        if env::consts::OS == "linux" {
+        if target_os == "linux" {
             // We built a C++ library, tell Rust to link the C++ stdlib
             println!("cargo:rustc-flags=-l dylib=stdc++");
 
             println!("cargo:rustc-link-lib=static=turbojpeg");
         }
 
-        if env::consts::OS == "macos" {
+        if target_os == "macos" {
             // We built a C++ library, tell Rust to link the C++ stdlib
             println!("cargo:rustc-flags=-lc++");
 
