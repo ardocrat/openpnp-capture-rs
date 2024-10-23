@@ -357,11 +357,7 @@ bool UVCCtrl::sendControlRequest(IOUSBDevRequest req)
     }
 
     kern_return_t kr;
-    if (@available(macOS 12.0, *))
-    {
-        // macOS 12 doesn't like if we're trying to open USB interface here...
-    }
-    else
+
     {
         kr = (*m_controller)->USBInterfaceOpen(m_controller);
         if (kr != kIOReturnSuccess)
@@ -411,11 +407,6 @@ bool UVCCtrl::sendControlRequest(IOUSBDevRequest req)
                 break; 
         }
 
-        if (@available(macOS 12.0, *))
-        {
-            // macOS 12 doesn't like if we're trying to close USB interface here...
-        }
-        else
         {
             kr = (*m_controller)->USBInterfaceClose(m_controller);
             if (kr != kIOReturnSuccess) {
@@ -426,10 +417,6 @@ bool UVCCtrl::sendControlRequest(IOUSBDevRequest req)
         return false;
     }
 
-    if (@available(macOS 12.0, *))
-    {
-        // macOS 12 doesn't like if we're trying to close USB interface here either...
-    }
     else
     {
         kr = (*m_controller)->USBInterfaceClose(m_controller);
